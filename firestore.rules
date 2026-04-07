@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // Collection: students
+    // Fields: name, rollNumber, age, grade, email, phoneNumber, parentContact, aadharNumber, faceDescriptor, isVerified, attentionScore, feedback
+    
+    // Collection: attendance
+    // Fields: studentId, date, timestamp, status, verificationMethod
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         request.auth.token.email == "vinodkumarreddyo823@gmail.com");
+    }
+
+    match /students/{studentId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAdmin() || isOwner(studentId);
+    }
+
+    match /attendance/{attendanceId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+  }
+}

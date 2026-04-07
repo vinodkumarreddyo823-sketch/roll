@@ -1,0 +1,5 @@
+{
+  "name": "FocusFlow: Smart Classroom Attention Manager",
+  "description": "An AI-powered dashboard for teachers to monitor and analyze student engagement and attention levels in real-time using computer vision.",
+  "requestFramePermissions": ["camera"]
+}

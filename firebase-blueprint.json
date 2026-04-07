@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Student": {
+      "title": "Student",
+      "description": "Student profile information including academic and personal details.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string" },
+        "rollNumber": { "type": "string" },
+        "age": { "type": "number" },
+        "grade": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phoneNumber": { "type": "string" },
+        "parentContact": { "type": "string" },
+        "aadharNumber": { "type": "string" },
+        "faceDescriptor": { "type": "string", "description": "Serialized face recognition data" },
+        "isVerified": { "type": "boolean" },
+        "attentionScore": { "type": "number" },
+        "feedback": { "type": "string" }
+      },
+      "required": ["name", "rollNumber", "email"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Daily attendance records verified by face recognition.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["present", "absent", "late"] },
+        "verificationMethod": { "type": "string", "enum": ["face", "manual"] }
+      },
+      "required": ["studentId", "date", "status"]
+    }
+  },
+  "firestore": {
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Student profile documents"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Attendance logs"
+    }
+  }
+}
